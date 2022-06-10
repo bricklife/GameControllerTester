@@ -6,7 +6,7 @@ struct GameControllerView: View {
     
     var body: some View {
         HStack {
-            Text(gameController.playerIndex.description)
+            Text(gameController.playerIndex.description + ":")
             Text(gameController.name)
             Text(gameController.productCategory)
             Text(gameController.batteryLevel.description)
@@ -28,7 +28,13 @@ extension GCControllerPlayerIndex: Identifiable {
 
 extension GCControllerPlayerIndex: CustomStringConvertible {
     public var description: String {
-        return self == .indexUnset ? "Unset" : "\(rawValue + 1)"
+        return self == .indexUnset ? "?" : "\(rawValue + 1)"
+    }
+}
+
+extension GCControllerPlayerIndex {
+    var optionString: String {
+        return self == .indexUnset ? "Unset" : description
     }
 }
 
@@ -43,7 +49,7 @@ struct GameControllerDetailView: View {
                 Text("\(gameController.gcController.physicalInputProfile)")
                 Picker("Player Index", selection: $playerIndex) { 
                     ForEach(indexAllCase) { index in
-                        Text(index.description).tag(index)
+                        Text(index.optionString).tag(index)
                     }
                 }
                 .pickerStyle(.segmented)
