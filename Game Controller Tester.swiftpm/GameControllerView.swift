@@ -9,6 +9,7 @@ struct GameControllerView: View {
             Text(gameController.playerIndex.description)
             Text(gameController.name)
             Text(gameController.productCategory)
+            Text(gameController.batteryLevel.description)
         }
     }
 }

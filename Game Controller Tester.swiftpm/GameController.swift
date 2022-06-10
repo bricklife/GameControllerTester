@@ -20,12 +20,30 @@ class GameController: ObservableObject {
             .sorted { $0.key < $1.key }
         
         gcController.publisher(for: \.playerIndex).assign(to: &$playerIndex)
+        gcController.battery?.publisher(for: \.batteryLevel)
+            .map({ BatteryLevel.value($0) }).assign(to: &$batteryLevel)
     }
     
     @Published private(set) var playerIndex: GCControllerPlayerIndex = .indexUnset
+    @Published private(set) var batteryLevel: BatteryLevel = .unknown
     
     func setPlayerIndex(_ playerIndex: GCControllerPlayerIndex) {
         gcController.playerIndex = playerIndex
     }
 }
 
+enum BatteryLevel {
+    case value(Float)
+    case unknown
+}
+
+extension BatteryLevel: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .value(let value):
+            return String(format: "%.0f%%", value * 100)
+        case .unknown:
+            return "-"
+        }
+    }
+}
